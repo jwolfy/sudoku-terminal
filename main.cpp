@@ -8,21 +8,26 @@ void draw(int board[9][9])
     cout << "\033[38;2;150;150;150m";
 
     cout << "   1 2 3   4 5 6   7 8 9" << endl;
-    for (int y = 0; y < 9; y++)
+    for (int y = 0; y < 9; ++y)
     {
         cout << "\033[38;2;150;150;150m";
         if (y == 3 || y == 6)
-        {
             cout << "   ------+-------+------" << endl;
-        }
         cout << char('A' + y) << "  ";
-        for (int x = 0; x < 9; x++)
+        for (int x = 0; x < 9; ++x)
         {
             if (x == 3 || x == 6)
-            {
                 cout << "\033[38;2;150;150;150m| ";
-            }
-            cout << "\033[0m" << board[x][y] << " ";
+
+            if (board[x][y] < 0)
+                cout << "\033[38;2;0;255;0m";
+            else
+                cout << "\033[0m";
+
+            if (board[x][y] != 0)
+                cout << abs(board[x][y]) << " ";
+            else
+                cout << "  ";
         }
         cout << endl;
     }
@@ -34,20 +39,20 @@ bool isLegal(int board[9][9], int x, int y, int value)
 {
     // check for out-of-border coordinates
     if (x < 0 || x >= 9 || y < 0 || y >= 9)
-    {
         return false;
-    }
 
     // check value
     if (value < 0 || value > 9)
-    {
         return false;
-    }
+
+    // check if starting square
+    if (board[x][y] < 0)
+        return false;
 
     // check for line duplicates
     for (int x = 0; x < 9; ++x)
     {
-        if (board[x][y] == value)
+        if (abs(board[x][y]) == value)
         {
             return false;
         }
@@ -56,7 +61,7 @@ bool isLegal(int board[9][9], int x, int y, int value)
     // check for column duplicates
     for (int y = 0; y < 9; ++y)
     {
-        if (board[x][y] == value)
+        if (abs(board[x][y]) == value)
         {
             return false;
         }
@@ -70,7 +75,7 @@ bool isLegal(int board[9][9], int x, int y, int value)
     {
         for (int y = subgrid_y; y < subgrid_y + 3; ++y)
         {
-            if (board[x][y] == value)
+            if (abs(board[x][y]) == value)
             {
                 return false;
             }
@@ -83,13 +88,13 @@ bool isLegal(int board[9][9], int x, int y, int value)
 int main()
 {
     int board[9][9] = {
+        {-1, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, -8, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {-8, -9, 0, 0, 0, 0, 0, 0, 0},
+        {0, -1, -5, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {-6, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0},
     };
@@ -98,7 +103,15 @@ int main()
 
     while (running)
     {
+// clear the screen
+#ifdef _WIN32
+        system("cls");
+#else
+        system("clear");
+#endif
+
         // display board
+        cout << endl;
         draw(board);
 
         cout << endl
