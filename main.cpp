@@ -3,6 +3,28 @@
 
 using namespace std;
 
+void draw(int board[9][9])
+{
+    cout << "   1 2 3   4 5 6   7 8 9" << endl;
+    for (int y = 0; y < 9; y++)
+    {
+        if (y == 3 || y == 6)
+        {
+            cout << "   ------+-------+------" << endl;
+        }
+        cout << char('A' + y) << "  ";
+        for (int x = 0; x < 9; x++)
+        {
+            if (x == 3 || x == 6)
+            {
+                cout << "| ";
+            }
+            cout << board[x][y] << " ";
+        }
+        cout << endl;
+    }
+}
+
 // check if a move is legal
 bool isLegal(int board[9][9], int x, int y, int value)
 {
@@ -18,7 +40,7 @@ bool isLegal(int board[9][9], int x, int y, int value)
         return false;
     }
 
-    // check line
+    // check for line duplicates
     for (int x = 0; x < 9; ++x)
     {
         if (board[x][y] == value)
@@ -27,7 +49,7 @@ bool isLegal(int board[9][9], int x, int y, int value)
         }
     }
 
-    // check column
+    // check for column duplicates
     for (int y = 0; y < 9; ++y)
     {
         if (board[x][y] == value)
@@ -36,7 +58,7 @@ bool isLegal(int board[9][9], int x, int y, int value)
         }
     }
 
-    // check subgrid
+    // check for subgrid duplicates
     int subgrid_x = (x / 3) * 3;
     int subgrid_y = (y / 3) * 3;
 
@@ -73,14 +95,7 @@ int main()
     while (running)
     {
         // display board
-        for (int y = 0; y < 9; y++)
-        {
-            for (int x = 0; x < 9; x++)
-            {
-                cout << board[x][y] << " ";
-            }
-            cout << endl;
-        }
+        draw(board);
 
         cout << endl
              << "Enter a command: ";
