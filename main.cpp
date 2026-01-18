@@ -5,9 +5,12 @@ using namespace std;
 
 void draw(int board[9][9])
 {
+    cout << "\033[38;2;150;150;150m";
+
     cout << "   1 2 3   4 5 6   7 8 9" << endl;
     for (int y = 0; y < 9; y++)
     {
+        cout << "\033[38;2;150;150;150m";
         if (y == 3 || y == 6)
         {
             cout << "   ------+-------+------" << endl;
@@ -17,12 +20,13 @@ void draw(int board[9][9])
         {
             if (x == 3 || x == 6)
             {
-                cout << "| ";
+                cout << "\033[38;2;150;150;150m| ";
             }
-            cout << board[x][y] << " ";
+            cout << "\033[0m" << board[x][y] << " ";
         }
         cout << endl;
     }
+    cout << "\033[0m";
 }
 
 // check if a move is legal
