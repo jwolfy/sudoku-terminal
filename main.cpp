@@ -1,7 +1,58 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
+
+bool save(string filename, int board[9][9])
+{
+    ofstream fout;
+
+    fout.open(filename);
+
+    if (fout.fail())
+    {
+        fout.close();
+        return false;
+    }
+
+    for (int y = 0; y < 9; ++y)
+    {
+        for (int x = 0; x < 9; ++x)
+        {
+
+            fout << board[x][y] << " ";
+        }
+        fout << endl;
+    }
+
+    fout.close();
+    return true;
+}
+
+bool load(string filename, int board[9][9])
+{
+    ifstream fin;
+
+    fin.open(filename);
+
+    if (fin.fail())
+    {
+        fin.close();
+        return false;
+    }
+
+    for (int y = 0; y < 9; ++y)
+    {
+        for (int x = 0; x < 9; ++x)
+        {
+            fin >> board[x][y];
+        }
+    }
+
+    fin.close();
+    return true;
+}
 
 void draw(int board[9][9])
 {
@@ -101,6 +152,9 @@ int main()
 
     bool running = true;
 
+    // load autosave
+    load("autosave.txt", board);
+
     while (running)
     {
 // clear the screen
@@ -140,6 +194,7 @@ int main()
 
         if (command == "exit")
         {
+            save("autosave.txt", board);
             running = false;
         }
 
